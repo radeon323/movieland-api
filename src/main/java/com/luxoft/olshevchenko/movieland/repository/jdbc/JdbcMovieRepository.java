@@ -77,23 +77,7 @@ public class JdbcMovieRepository implements MovieRepository {
 
     @Override
     public Movie getById(Long id) {
-        List<Movie> movies = (List<Movie>) jdbcTemplate.queryForObject(FIND_BY_ID_WITH_GENRES_SQL, MOVIE_ROW_MAPPER, new Object[]{id});
-
-        Set<Genre> genres = new HashSet<>();
-        for (Movie movie : movies) {
-            genres.addAll(movie.getGenres());
-        }
-        Movie movie = movies.get(0);
-        movie.setGenres(genres);
-
-//        Movie movie = (Movie) jdbcTemplate.queryForObject(FIND_BY_ID_WITH_GENRES_SQL, MOVIE_ROW_MAPPER, new Object[]{id});
-        return movie;
+        return jdbcTemplate.query(FIND_BY_ID_WITH_GENRES_SQL, MOVIE_RESULT_SET_EXTRACTOR, id);
     }
 
-
-//    private final ResultSetExtractor<List<Genre>> resultSetExtractor =
-//            JdbcTemplateMapperFactory
-//                    .newInstance()
-//                    .addKeys("id")
-//                    .newResultSetExtractor(Genre.class);
 }

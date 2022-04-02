@@ -15,8 +15,7 @@ import java.util.Set;
 public class MovieRowMapper implements RowMapper<Movie> {
 
     public Movie mapRow(ResultSet resultSet, int numRow) throws SQLException {
-//        MovieResultSetExtractor extractor = new MovieResultSetExtractor();
-//        return extractor.extractData(resultSet);
+
         Movie movie = mapRowMovie(resultSet);
 
         Set<Genre> genres = movie.getGenres();
@@ -30,8 +29,6 @@ public class MovieRowMapper implements RowMapper<Movie> {
         movie.setGenres(genres);
         return movie;
     }
-
-
 
 
     private Movie mapRowMovie(ResultSet resultSet) throws SQLException {

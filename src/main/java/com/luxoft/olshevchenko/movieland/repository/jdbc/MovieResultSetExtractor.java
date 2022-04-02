@@ -3,10 +3,7 @@ package com.luxoft.olshevchenko.movieland.repository.jdbc;
 import com.luxoft.olshevchenko.movieland.entity.Genre;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -17,12 +14,11 @@ import java.util.Set;
  */
 public class MovieResultSetExtractor implements ResultSetExtractor <Movie> {
 
-    public final static RowMapper<Movie> movieMapper = BeanPropertyRowMapper.newInstance(Movie.class);
-    public final static RowMapper<Genre> genreMapper = BeanPropertyRowMapper.newInstance(Genre.class);
-
     @Override
     public Movie extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-
+        if (!resultSet.next()) {
+            return null;
+        }
 
         Movie movie = mapRowMovie(resultSet);
 
@@ -31,8 +27,11 @@ public class MovieResultSetExtractor implements ResultSetExtractor <Movie> {
             genres = new HashSet<>();
         }
 
-        Genre genre = mapRowGenre(resultSet);
-        genres.add(genre);
+        genres.add(mapRowGenre(resultSet));
+
+        while (resultSet.next()) {
+            genres.add(mapRowGenre(resultSet));
+        }
 
         movie.setGenres(genres);
 
