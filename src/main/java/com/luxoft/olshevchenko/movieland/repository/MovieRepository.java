@@ -19,6 +19,4 @@ public interface MovieRepository {
     public void remove(int id);
 
     public void edit(Movie movie);
-
-
 }

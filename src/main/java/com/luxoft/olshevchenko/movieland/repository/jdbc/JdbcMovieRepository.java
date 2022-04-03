@@ -2,6 +2,8 @@ package com.luxoft.olshevchenko.movieland.repository.jdbc;
 
 import com.luxoft.olshevchenko.movieland.repository.MovieRepository;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
+import com.luxoft.olshevchenko.movieland.repository.mapper.MovieResultSetExtractor;
+import com.luxoft.olshevchenko.movieland.repository.mapper.MovieFullRowMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JdbcMovieRepository implements MovieRepository {
     Logger logger = LoggerFactory.getLogger(getClass());
-    private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
+    private static final MovieFullRowMapper MOVIE_ROW_MAPPER = new MovieFullRowMapper();
     private static final MovieResultSetExtractor MOVIE_RESULT_SET_EXTRACTOR = new MovieResultSetExtractor();
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
