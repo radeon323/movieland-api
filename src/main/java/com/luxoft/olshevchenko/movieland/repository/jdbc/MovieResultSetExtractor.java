@@ -47,8 +47,8 @@ public class MovieResultSetExtractor implements ResultSetExtractor <Movie> {
         double price = resultSet.getDouble("price");
         double rating = resultSet.getDouble("rating");
         Movie movie = Movie.builder().
-                movie_id(movieId)
-                .movie_name(movieName)
+                movieId(movieId)
+                .movieName(movieName)
                 .year(year)
                 .country(country)
                 .description(description)
@@ -62,7 +62,7 @@ public class MovieResultSetExtractor implements ResultSetExtractor <Movie> {
         Long genreId = resultSet.getLong("genre_id");
         String genreName = resultSet.getString("genre");
         Genre genre = Genre.builder().
-                id(genreId)
+                genreId(genreId)
                 .genre(genreName)
                 .build();
         return genre;

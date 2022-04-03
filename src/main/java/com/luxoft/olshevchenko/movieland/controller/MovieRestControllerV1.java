@@ -68,4 +68,19 @@ public class MovieRestControllerV1 {
         logger.info("Request Body {}", responseEntity.getBody());
         return responseEntity;
     }
+
+    @GetMapping(value = "/random/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Movie>> showRandomMovies(@PathVariable("quantity") Long quantity) {
+
+        List<Movie> movies = movieService.getRandom(quantity);
+
+        if (movies.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ResponseEntity<List<Movie>> responseEntity = new ResponseEntity<>(movies, HttpStatus.OK);
+        logger.info("Status Code {}", responseEntity.getStatusCode());
+        logger.info("Request Body {}", responseEntity.getBody());
+        return responseEntity;
+    }
 }

@@ -17,14 +17,14 @@ import java.util.Set;
 @Builder
 public class Movie implements Serializable {
 
-    private Long movie_id;
-    private String movie_name;
+    private Long movieId;
+    private String movieName;
     private int year;
     private String country;
     private String description;
     private double rating;
     private double price;
-    private Set<Genre> genres = new HashSet<>();
+    private Set<Genre> genres;
 
     public void addGenre(Genre genre) {
         genres.add(genre);
@@ -35,19 +35,19 @@ public class Movie implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Movie)) return false;
         Movie movie = (Movie) o;
-        return this.getMovie_id().equals(movie.getMovie_id());
+        return this.getMovieId().equals(movie.getMovieId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getMovie_id());
+        return Objects.hash(this.getMovieId());
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "movie_id = " + movie_id + ", " +
-                "movieName = " + movie_name + ", " +
+                "movie_id = " + movieId + ", " +
+                "movieName = " + movieName + ", " +
                 "year = " + year + ", " +
                 "county = " + country + ", " +
                 "description = " + description + ", " +

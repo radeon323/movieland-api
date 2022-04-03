@@ -23,5 +23,9 @@ public class MovieService {
         return movieRepository.getById(id);
     }
 
+    public List<Movie> getRandom(Long quantity) {
+        return movieRepository.getRandom(quantity);
+    }
+
 
 }
