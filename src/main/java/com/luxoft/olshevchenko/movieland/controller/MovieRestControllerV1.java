@@ -47,11 +47,12 @@ public class MovieRestControllerV1 {
         return responseEntity;
     }
 
-    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Movie> getMovieByIdShort(@PathVariable("id") Long movieId) {
+    @GetMapping(value = "{movieId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Movie> getMovieByIdShort(@PathVariable("movieId") Long movieId,
+                                                   @RequestParam(value = "currency", required = false) String currency) {
         logger.info("MovieRestControllerV1 getMovieByIdShort {}", movieId);
 
-        Movie movie = movieService.getById(movieId);
+        Movie movie = movieService.getById(movieId, currency);
 
         if (movieId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

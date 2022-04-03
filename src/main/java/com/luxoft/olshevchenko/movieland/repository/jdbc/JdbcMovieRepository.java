@@ -115,11 +115,10 @@ public class JdbcMovieRepository implements MovieRepository {
         } else if (Objects.equals(order, "desc")){
             movies = jdbcTemplate.query(SORT_BY_RATING_DESC, MOVIE_ROW_MAPPER);
         } else {
-            movies = jdbcTemplate.query(FIND_ALL_WITH_GENRES, MOVIE_ROW_MAPPER);
+            movies = getAll();
         }
         return movies;
     }
-
 
     @Override
     public List<Movie> getByGenre(Long genreId) {
@@ -128,8 +127,8 @@ public class JdbcMovieRepository implements MovieRepository {
     }
 
     @Override
-    public Movie getById(Long id) {
-        return jdbcTemplate.query(FIND_BY_ID_WITH_GENRES, MOVIE_RESULT_SET_EXTRACTOR, id);
+    public Movie getById(Long movieId, String currency) {
+        return jdbcTemplate.query(FIND_BY_ID_WITH_GENRES, MOVIE_RESULT_SET_EXTRACTOR, movieId);
     }
 
     @Override
