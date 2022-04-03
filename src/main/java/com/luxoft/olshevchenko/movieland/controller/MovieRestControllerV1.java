@@ -13,9 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Oleksandr Shevchenko
@@ -31,9 +33,15 @@ public class MovieRestControllerV1 {
     private final MovieService movieService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Movie>> showAllMovies() {
+    public ResponseEntity<List<Movie>> showAllMovies(@RequestParam(value = "genre", required = false) String genre,
+                                                    @RequestParam(value = "rating", required = false) String rating) {
+        List<Movie> movies;
 
-        List<Movie> movies = movieService.getAll();
+        if (genre != null) {
+            movies = movieService.findByGenre(genre);
+        }
+
+        movies = movieService.sortByRating(rating);
 
         if (movies.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

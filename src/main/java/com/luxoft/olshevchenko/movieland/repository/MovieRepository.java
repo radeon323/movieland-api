@@ -19,4 +19,8 @@ public interface MovieRepository {
     public void remove(int id);
 
     public void edit(Movie movie);
+
+    public List<Movie> sortByRating(String order);
+
+    public List<Movie> findByGenre(String genre);
 }

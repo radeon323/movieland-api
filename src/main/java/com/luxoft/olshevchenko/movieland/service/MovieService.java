@@ -28,4 +28,11 @@ public class MovieService {
     }
 
 
+    public List<Movie> sortByRating(String order) {
+        return movieRepository.sortByRating(order);
+    }
+
+    public List<Movie> findByGenre(String genre) {
+        return movieRepository.findByGenre(genre);
+    }
 }
