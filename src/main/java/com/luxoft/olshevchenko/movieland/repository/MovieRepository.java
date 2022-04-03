@@ -16,11 +16,11 @@ public interface MovieRepository {
 
     public void add(Movie movie);
 
-    public void remove(int id);
+    public void remove(Long id);
 
     public void edit(Movie movie);
 
     public List<Movie> sortByRating(String order);
 
-    public List<Movie> findByGenre(String genre);
+    List<Movie> getByGenre(Long genreId);
 }

@@ -27,12 +27,11 @@ public class MovieService {
         return movieRepository.getRandom(quantity);
     }
 
-
     public List<Movie> sortByRating(String order) {
         return movieRepository.sortByRating(order);
     }
 
-    public List<Movie> findByGenre(String genre) {
-        return movieRepository.findByGenre(genre);
+    public List<Movie> getMoviesByGenreId(Long genreId) {
+        return movieRepository.getByGenre(genreId);
     }
 }

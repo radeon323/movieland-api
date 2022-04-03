@@ -71,6 +71,14 @@ public class JdbcMovieRepository implements MovieRepository {
             "ON genres.genre_id = movie_genres.genre_id " +
             "ORDER BY movie.rating desc;";
 
+    private static final String GET_BY_GENRE_ID =
+            "SELECT * FROM movie " +
+            "LEFT JOIN movie_genres " +
+            "ON movie.movie_id = movie_genres.movie_id " +
+            "LEFT JOIN genres " +
+            "ON genres.genre_id = movie_genres.genre_id " +
+            "WHERE genres.genre_id = ?;";
+
     @Override
     public List<Movie> getAll() {
         List<Movie> movies = jdbcTemplate.query(FIND_ALL_WITH_GENRES, MOVIE_ROW_MAPPER);
@@ -90,7 +98,7 @@ public class JdbcMovieRepository implements MovieRepository {
     }
 
     @Override
-    public void remove(int id) {
+    public void remove(Long id) {
         jdbcTemplate.update(DELETE_BY_ID, id);
     }
 
@@ -112,9 +120,11 @@ public class JdbcMovieRepository implements MovieRepository {
         return movies;
     }
 
+
     @Override
-    public List<Movie> findByGenre(String genre) {
-        return null;
+    public List<Movie> getByGenre(Long genreId) {
+        List<Movie> movies = jdbcTemplate.query(GET_BY_GENRE_ID, MOVIE_ROW_MAPPER, genreId);
+        return movies;
     }
 
     @Override

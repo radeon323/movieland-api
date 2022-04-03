@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Oleksandr Shevchenko
@@ -33,15 +32,10 @@ public class MovieRestControllerV1 {
     private final MovieService movieService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Movie>> showAllMovies(@RequestParam(value = "genre", required = false) String genre,
-                                                    @RequestParam(value = "rating", required = false) String rating) {
-        List<Movie> movies;
+    public ResponseEntity<List<Movie>> showAllMovies(@RequestParam(value = "rating", required = false) String rating) {
+        logger.info("MovieRestControllerV1 showAllMovies");
 
-        if (genre != null) {
-            movies = movieService.findByGenre(genre);
-        }
-
-        movies = movieService.sortByRating(rating);
+        List<Movie> movies = movieService.sortByRating(rating);
 
         if (movies.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -75,10 +69,31 @@ public class MovieRestControllerV1 {
 
     @GetMapping(value = "/random/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Movie>> showRandomMovies(@PathVariable("quantity") Long quantity) {
+        logger.info("MovieRestControllerV1 showRandomMovies {}", quantity);
 
         List<Movie> movies = movieService.getRandom(quantity);
 
         if (movies.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ResponseEntity<List<Movie>> responseEntity = new ResponseEntity<>(movies, HttpStatus.OK);
+        logger.info("Status Code {}", responseEntity.getStatusCode());
+        logger.info("Request Body {}", responseEntity.getBody());
+        return responseEntity;
+    }
+
+    @GetMapping(value = "genre/{genreId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Movie>> getMoviesByGenreId(@PathVariable("genreId") Long genreId) {
+        logger.info("MovieRestControllerV1 getMovieByIdShort {}", genreId);
+
+        List<Movie> movies = movieService.getMoviesByGenreId(genreId);
+
+        if (genreId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (movies == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
