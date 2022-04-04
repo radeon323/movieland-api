@@ -24,7 +24,8 @@ public class MovieService {
     public Movie getById(Long movieId, String currency) {
         Movie movie = movieRepository.getById(movieId, currency);
 
-        if (Objects.equals(currency, "USD") || Objects.equals(currency, "usd") || Objects.equals(currency, "EUR") || Objects.equals(currency, "eur")) {
+        if (Objects.equals(currency, "USD") || Objects.equals(currency, "usd") ||
+            Objects.equals(currency, "EUR") || Objects.equals(currency, "eur")) {
             double rate = currencyService.getCurrencyRateOnThisDay(currency);
             movie.setPrice(Math.round(movie.getPrice()/rate));
             return movie;

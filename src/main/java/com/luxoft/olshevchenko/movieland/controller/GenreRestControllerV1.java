@@ -1,9 +1,7 @@
 package com.luxoft.olshevchenko.movieland.controller;
 
 import com.luxoft.olshevchenko.movieland.entity.Genre;
-import com.luxoft.olshevchenko.movieland.entity.Movie;
 import com.luxoft.olshevchenko.movieland.service.GenreService;
-import com.luxoft.olshevchenko.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
