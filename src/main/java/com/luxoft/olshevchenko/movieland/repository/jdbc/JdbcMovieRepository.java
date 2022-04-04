@@ -27,57 +27,22 @@ public class JdbcMovieRepository implements MovieRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final String FIND_ALL = "SELECT movie_id, movie_name, year, country, description, price, rating FROM movie;";
-    private static final String FIND_ALL_WITH_GENRES =
-            "SELECT * FROM movie " +
-            "LEFT JOIN movie_genres " +
-            "ON movie.movie_id = movie_genres.movie_id " +
-            "LEFT JOIN genres " +
-            "ON genres.genre_id = movie_genres.genre_id;";
-
     private static final String FIND_BY_ID = "SELECT movie_id, movie_name, year, country, description, price, rating FROM movie WHERE movie_id = ?";
-    private static final String FIND_BY_ID_WITH_GENRES =
-            "SELECT * FROM movie " +
+    private static final String FIND_ALL_WITH_GENRES =
+            "SELECT movie.movie_id, movie.movie_name, movie.year, movie.country, " +
+            "movie.description, movie.price, movie.rating, genres.genre_id, genres.genre FROM movie " +
             "LEFT JOIN movie_genres " +
             "ON movie.movie_id = movie_genres.movie_id " +
             "LEFT JOIN genres " +
-            "ON genres.genre_id = movie_genres.genre_id " +
-            "WHERE movie.movie_id = ?;";
-
+            "ON genres.genre_id = movie_genres.genre_id ";
+    private static final String FIND_BY_ID_WITH_GENRES = FIND_ALL_WITH_GENRES + "WHERE movie.movie_id = ?;";
     private static final String ADD = "INSERT INTO movie (movie_name, year, country, description, price, rating) VALUES (:name, :year, :country, :description, :price);";
-
     private static final String DELETE_BY_ID = "DELETE FROM movie WHERE movie_id = ?;";
     private static final String UPDATE_BY_ID = "UPDATE movie SET movie_name = ?, year = ?, country = ?, description = ?, price = ?, rating = ? WHERE movie_id = ?;";
-    private static final String SELECT_RANDOM =
-            "SELECT * FROM movie " +
-            "LEFT JOIN movie_genres " +
-            "ON movie.movie_id = movie_genres.movie_id " +
-            "LEFT JOIN genres " +
-            "ON genres.genre_id = movie_genres.genre_id " +
-            "ORDER BY RANDOM() LIMIT ?;";
+    private static final String SELECT_RANDOM = FIND_ALL_WITH_GENRES + "ORDER BY RANDOM() LIMIT ?;";
+    private static final String SORT_BY_RATING = FIND_ALL_WITH_GENRES + "ORDER BY movie.rating ";
+    private static final String GET_BY_GENRE_ID = FIND_ALL_WITH_GENRES + "WHERE genres.genre_id = ?;";
 
-    private static final String SORT_BY_RATING_ASC =
-            "SELECT * FROM movie " +
-            "LEFT JOIN movie_genres " +
-            "ON movie.movie_id = movie_genres.movie_id " +
-            "LEFT JOIN genres " +
-            "ON genres.genre_id = movie_genres.genre_id " +
-            "ORDER BY movie.rating asc;";
-
-    private static final String SORT_BY_RATING_DESC =
-            "SELECT * FROM movie " +
-            "LEFT JOIN movie_genres " +
-            "ON movie.movie_id = movie_genres.movie_id " +
-            "LEFT JOIN genres " +
-            "ON genres.genre_id = movie_genres.genre_id " +
-            "ORDER BY movie.rating desc;";
-
-    private static final String GET_BY_GENRE_ID =
-            "SELECT * FROM movie " +
-            "LEFT JOIN movie_genres " +
-            "ON movie.movie_id = movie_genres.movie_id " +
-            "LEFT JOIN genres " +
-            "ON genres.genre_id = movie_genres.genre_id " +
-            "WHERE genres.genre_id = ?;";
 
     @Override
     public List<Movie> getAll() {
@@ -109,14 +74,7 @@ public class JdbcMovieRepository implements MovieRepository {
 
     @Override
     public List<Movie> sortByRating(String order) {
-        List<Movie> movies;
-        if (Objects.equals(order, "asc")) {
-            movies = jdbcTemplate.query(SORT_BY_RATING_ASC, MOVIE_ROW_MAPPER);
-        } else if (Objects.equals(order, "desc")){
-            movies = jdbcTemplate.query(SORT_BY_RATING_DESC, MOVIE_ROW_MAPPER);
-        } else {
-            movies = getAll();
-        }
+        List<Movie> movies = jdbcTemplate.query(SORT_BY_RATING + order, MOVIE_ROW_MAPPER);
         return movies;
     }
 
@@ -127,7 +85,7 @@ public class JdbcMovieRepository implements MovieRepository {
     }
 
     @Override
-    public Movie getById(Long movieId, String currency) {
+    public Movie getById(Long movieId) {
         return jdbcTemplate.query(FIND_BY_ID_WITH_GENRES, MOVIE_RESULT_SET_EXTRACTOR, movieId);
     }
 

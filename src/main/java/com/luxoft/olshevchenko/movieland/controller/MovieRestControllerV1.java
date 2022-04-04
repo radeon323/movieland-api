@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Oleksandr Shevchenko
@@ -35,7 +36,12 @@ public class MovieRestControllerV1 {
     public ResponseEntity<List<Movie>> showAllMovies(@RequestParam(value = "rating", required = false) String rating) {
         logger.info("MovieRestControllerV1 showAllMovies");
 
-        List<Movie> movies = movieService.sortByRating(rating);
+        List<Movie> movies;
+        if (Objects.equals(rating, "asc") || Objects.equals(rating, "desc")) {
+            movies = movieService.sortByRating(rating);
+        } else {
+            movies = movieService.getAll();
+        }
 
         if (movies.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

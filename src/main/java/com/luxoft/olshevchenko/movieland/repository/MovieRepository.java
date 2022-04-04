@@ -10,7 +10,7 @@ import java.util.List;
 public interface MovieRepository {
     public List<Movie> getAll();
 
-    public Movie getById(Long movieId, String currency);
+    public Movie getById(Long movieId);
 
     public List<Movie> getRandom(Long quantity);
 
