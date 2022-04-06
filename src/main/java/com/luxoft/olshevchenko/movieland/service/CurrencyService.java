@@ -15,7 +15,6 @@ import java.util.Objects;
  */
 @Service
 public class CurrencyService {
-    private final String path = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
     ObjectMapper objectMapper = new ObjectMapper();
 
     @SneakyThrows
@@ -34,6 +33,7 @@ public class CurrencyService {
 
     @SneakyThrows
     private Currency[] getCurrencies() {
+        String path = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
         URL www = new URL(path);
         return objectMapper.readValue(www, Currency[].class);
     }
