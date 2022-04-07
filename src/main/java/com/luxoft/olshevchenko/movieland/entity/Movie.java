@@ -1,12 +1,11 @@
 package com.luxoft.olshevchenko.movieland.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -14,6 +13,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@EqualsAndHashCode
 @Builder
 public class Movie implements Serializable {
 
@@ -28,19 +28,6 @@ public class Movie implements Serializable {
 
     public void addGenre(Genre genre) {
         genres.add(genre);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Movie)) return false;
-        Movie movie = (Movie) o;
-        return this.getMovieId().equals(movie.getMovieId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.getMovieId());
     }
 
     @Override

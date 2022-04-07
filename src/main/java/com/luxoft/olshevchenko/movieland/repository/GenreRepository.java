@@ -8,5 +8,5 @@ import java.util.List;
  * @author Oleksandr Shevchenko
  */
 public interface GenreRepository {
-    public List<Genre> getAll();
+    List<Genre> getAll();
 }

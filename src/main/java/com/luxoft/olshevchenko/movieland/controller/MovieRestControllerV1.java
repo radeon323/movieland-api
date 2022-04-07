@@ -49,7 +49,6 @@ public class MovieRestControllerV1 {
 
         ResponseEntity<List<Movie>> responseEntity = new ResponseEntity<>(movies, HttpStatus.OK);
         logger.info("Status Code {}", responseEntity.getStatusCode());
-        logger.info("Request Body {}", responseEntity.getBody());
         return responseEntity;
     }
 

@@ -3,7 +3,8 @@ package com.luxoft.olshevchenko.movieland.repository.jdbc;
 import com.luxoft.olshevchenko.movieland.repository.MovieRepository;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
 import com.luxoft.olshevchenko.movieland.repository.mapper.MovieResultSetExtractor;
-import com.luxoft.olshevchenko.movieland.repository.mapper.MovieFullRowMapper;
+import com.luxoft.olshevchenko.movieland.repository.mapper.MovieListResultSetExtractor;
+import com.luxoft.olshevchenko.movieland.repository.mapper.MovieRowMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JdbcMovieRepository implements MovieRepository {
     Logger logger = LoggerFactory.getLogger(getClass());
-    private static final MovieFullRowMapper MOVIE_ROW_MAPPER = new MovieFullRowMapper();
+    private static final MovieListResultSetExtractor MOVIE_LIST_RESULT_SET_EXTRACTOR = new MovieListResultSetExtractor();
     private static final MovieResultSetExtractor MOVIE_RESULT_SET_EXTRACTOR = new MovieResultSetExtractor();
-    private final JdbcTemplate jdbcTemplate;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
 
     private static final String FIND_ALL = "SELECT movie_id, movie_name, year, country, description, price, rating FROM movie;";
     private static final String FIND_BY_ID = "SELECT movie_id, movie_name, year, country, description, price, rating FROM movie WHERE movie_id = ?";
@@ -43,10 +43,12 @@ public class JdbcMovieRepository implements MovieRepository {
     private static final String SORT_BY_RATING = FIND_ALL_WITH_GENRES + "ORDER BY movie.rating ";
     private static final String GET_BY_GENRE_ID = FIND_ALL_WITH_GENRES + "WHERE genres.genre_id = ?;";
 
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public List<Movie> getAll() {
-        List<Movie> movies = jdbcTemplate.query(FIND_ALL_WITH_GENRES, MOVIE_ROW_MAPPER);
+        List<Movie> movies = jdbcTemplate.query(FIND_ALL_WITH_GENRES, MOVIE_LIST_RESULT_SET_EXTRACTOR);
         return movies;
     }
 
@@ -74,13 +76,14 @@ public class JdbcMovieRepository implements MovieRepository {
 
     @Override
     public List<Movie> sortByRating(String order) {
-        List<Movie> movies = jdbcTemplate.query(SORT_BY_RATING + order, MOVIE_ROW_MAPPER);
+        StringJoiner joiner = new StringJoiner("",SORT_BY_RATING,order);
+        List<Movie> movies = jdbcTemplate.query(joiner.toString(), MOVIE_LIST_RESULT_SET_EXTRACTOR);
         return movies;
     }
 
     @Override
     public List<Movie> getByGenre(Long genreId) {
-        List<Movie> movies = jdbcTemplate.query(GET_BY_GENRE_ID, MOVIE_ROW_MAPPER, genreId);
+        List<Movie> movies = jdbcTemplate.query(GET_BY_GENRE_ID, MOVIE_LIST_RESULT_SET_EXTRACTOR, genreId);
         return movies;
     }
 
@@ -91,7 +94,7 @@ public class JdbcMovieRepository implements MovieRepository {
 
     @Override
     public List<Movie> getRandom(Long quantity) {
-        List<Movie> movies = jdbcTemplate.query(SELECT_RANDOM, MOVIE_ROW_MAPPER, quantity);
+        List<Movie> movies = jdbcTemplate.query(SELECT_RANDOM, MOVIE_LIST_RESULT_SET_EXTRACTOR, quantity);
         return movies;
     }
 

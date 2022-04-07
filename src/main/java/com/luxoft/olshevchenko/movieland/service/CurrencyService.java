@@ -5,7 +5,6 @@ import com.luxoft.olshevchenko.movieland.entity.Currency;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
