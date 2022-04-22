@@ -1,5 +1,6 @@
 package com.luxoft.olshevchenko.movieland.service;
 
+import com.luxoft.olshevchenko.movieland.entity.enums.Currencies;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,7 +17,7 @@ class CurrencyServiceTest {
 
     @Test
     void testGetCurrencyRateOnThisDay() {
-        String currency = "USD";
+        Currencies currency = Currencies.USD;
         Mockito.when(currencyService.getCurrencyRateOnThisDay(currency)).thenReturn(22.33);
         double currencyRate = currencyService.getCurrencyRateOnThisDay(currency);
         assertEquals(22.33, currencyRate);

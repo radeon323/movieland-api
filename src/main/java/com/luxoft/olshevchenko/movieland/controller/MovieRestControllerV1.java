@@ -1,5 +1,7 @@
 package com.luxoft.olshevchenko.movieland.controller;
 
+import com.luxoft.olshevchenko.movieland.entity.enums.Order;
+import com.luxoft.olshevchenko.movieland.entity.enums.Currencies;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
 import com.luxoft.olshevchenko.movieland.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +35,17 @@ public class MovieRestControllerV1 {
     private final MovieService movieService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Movie>> showAllMovies(@RequestParam(value = "rating", required = false) String rating) {
+    public ResponseEntity<List<Movie>> showAllMovies(@RequestParam(value = "rating", required = false, defaultValue = "decs") String rating,
+                                                     @RequestParam(value = "price", required = false, defaultValue = "decs") String price) {
         logger.info("MovieRestControllerV1 showAllMovies");
 
         List<Movie> movies;
-        if (Objects.equals(rating, "asc") || Objects.equals(rating, "desc")) {
+        if (Objects.equals(rating.toUpperCase(), String.valueOf(Order.ASC)) ||
+            Objects.equals(rating.toUpperCase(), String.valueOf(Order.DESC))) {
             movies = movieService.sortByRating(rating);
+        } else if (Objects.equals(price.toUpperCase(), String.valueOf(Order.ASC)) ||
+                  Objects.equals(price.toUpperCase(), String.valueOf(Order.DESC))){
+            movies = movieService.sortByPrice(price);
         } else {
             movies = movieService.getAll();
         }
@@ -54,10 +61,10 @@ public class MovieRestControllerV1 {
 
     @GetMapping(value = "{movieId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Movie> getMovieByIdShort(@PathVariable("movieId") Long movieId,
-                                                   @RequestParam(value = "currency", required = false) String currency) {
+                                                   @RequestParam(defaultValue = "UAH") String currency) {
         logger.info("MovieRestControllerV1 getMovieByIdShort {}", movieId);
 
-        Movie movie = movieService.getById(movieId, currency);
+        Movie movie = movieService.getById(movieId, getCurrencyValue(currency));
 
         if (movieId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -107,5 +114,15 @@ public class MovieRestControllerV1 {
         logger.info("Status Code {}", responseEntity.getStatusCode());
         logger.info("Request Body {}", responseEntity.getBody());
         return responseEntity;
+    }
+
+
+
+    private Currencies getCurrencyValue(String currency) {
+        try {
+            return Currencies.currencyIgnoreCase(currency);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid currency parameter: " + currency, e);
+        }
     }
 }

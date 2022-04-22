@@ -41,6 +41,7 @@ public class JdbcMovieRepository implements MovieRepository {
     private static final String UPDATE_BY_ID = "UPDATE movie SET movie_name = ?, year = ?, country = ?, description = ?, price = ?, rating = ? WHERE movie_id = ?;";
     private static final String SELECT_RANDOM = FIND_ALL_WITH_GENRES + "ORDER BY RANDOM() LIMIT ?;";
     private static final String SORT_BY_RATING = FIND_ALL_WITH_GENRES + "ORDER BY movie.rating ";
+    private static final String SORT_BY_PRICE = FIND_ALL_WITH_GENRES + "ORDER BY movie.price ";
     private static final String GET_BY_GENRE_ID = FIND_ALL_WITH_GENRES + "WHERE genres.genre_id = ?;";
 
     private final JdbcTemplate jdbcTemplate;
@@ -77,7 +78,18 @@ public class JdbcMovieRepository implements MovieRepository {
     @Override
     public List<Movie> sortByRating(String order) {
         StringJoiner joiner = new StringJoiner("",SORT_BY_RATING,order);
-        List<Movie> movies = jdbcTemplate.query(joiner.toString(), MOVIE_LIST_RESULT_SET_EXTRACTOR);
+        List<Movie> movies = jdbcTemplate.query(joiner.toString(), MOVIE_ROW_MAPPER);
+//        List<Movie> movies = jdbcTemplate.query(joiner.toString(), MOVIE_LIST_RESULT_SET_EXTRACTOR);
+        logger.info(joiner.toString(), joiner);
+        return movies;
+    }
+
+    @Override
+    public List<Movie> sortByPrice(String order) {
+        StringJoiner joiner = new StringJoiner("",SORT_BY_PRICE,order);
+        List<Movie> movies = jdbcTemplate.query(joiner.toString(), MOVIE_ROW_MAPPER);
+//        List<Movie> movies = jdbcTemplate.query(joiner.toString(), MOVIE_LIST_RESULT_SET_EXTRACTOR);
+        logger.info(joiner.toString(), joiner);
         return movies;
     }
 

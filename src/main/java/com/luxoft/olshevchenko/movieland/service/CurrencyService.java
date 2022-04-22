@@ -1,13 +1,12 @@
 package com.luxoft.olshevchenko.movieland.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luxoft.olshevchenko.movieland.entity.enums.Currencies;
 import com.luxoft.olshevchenko.movieland.entity.Currency;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @author Oleksandr Shevchenko
@@ -15,15 +14,15 @@ import java.util.Objects;
 @Service
 public class CurrencyService {
     ObjectMapper objectMapper = new ObjectMapper();
+    private static final String path = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
     @SneakyThrows
-    public double getCurrencyRateOnThisDay(String curr) {
+    public double getCurrencyRateOnThisDay(Currencies currencies) {
         Currency[] currencyList = getCurrencies();
-        System.out.println(Arrays.toString(currencyList));
         for (Currency currency : currencyList) {
-            if (Objects.equals(curr, "USD") || Objects.equals(curr, "usd") && currency.getR030() == 840) {
+            if (Currencies.USD == currencies && currency.getR030() == 840) {
                 return currency.getRate();
-            } else if (Objects.equals(curr, "EUR") || Objects.equals(curr, "eur") && currency.getR030() == 978) {
+            } else if (Currencies.EUR == currencies && currency.getR030() == 978) {
                 return currency.getRate();
             }
         }
@@ -32,8 +31,6 @@ public class CurrencyService {
 
     @SneakyThrows
     private Currency[] getCurrencies() {
-        String path = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-        URL www = new URL(path);
-        return objectMapper.readValue(www, Currency[].class);
+        return objectMapper.readValue(new URL(path), Currency[].class);
     }
 }

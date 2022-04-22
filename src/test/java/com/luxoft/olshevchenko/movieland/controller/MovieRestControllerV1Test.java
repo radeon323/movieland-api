@@ -1,6 +1,7 @@
 package com.luxoft.olshevchenko.movieland.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luxoft.olshevchenko.movieland.entity.enums.Currencies;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
 import com.luxoft.olshevchenko.movieland.service.CurrencyService;
 import com.luxoft.olshevchenko.movieland.service.GenreService;
@@ -139,7 +140,7 @@ class MovieRestControllerV1Test {
                 .price(100)
                 .genres(new HashSet<>())
                 .build();
-        String currency = "USD";
+        Currencies currency = Currencies.USD;
         when(currencyService.getCurrencyRateOnThisDay(currency)).thenReturn(29.25);
         when(movieService.getById(1L, null)).thenReturn(movie);
         mockMvc.perform( MockMvcRequestBuilders

@@ -32,13 +32,15 @@ public class Movie implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "movie_id = " + movieId + ", " +
-                "movieName = " + movieName + ", " +
-                "year = " + year + ", " +
-                "county = " + country + ", " +
-                "description = " + description + ", " +
-                "rating = " + rating + ", " +
-                "price = " + price + ")";
+        return "Movie{" +
+                "movieId=" + movieId +
+                ", movieName='" + movieName + '\'' +
+                ", year=" + year +
+                ", country='" + country + '\'' +
+                ", description='" + description + '\'' +
+                ", rating=" + rating +
+                ", price=" + price +
+                ", genres=" + genres +
+                '}';
     }
 }

@@ -1,12 +1,12 @@
 package com.luxoft.olshevchenko.movieland.service;
 
+import com.luxoft.olshevchenko.movieland.entity.enums.Currencies;
 import com.luxoft.olshevchenko.movieland.repository.MovieRepository;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Oleksandr Shevchenko
@@ -21,11 +21,10 @@ public class MovieService {
         return movieRepository.getAll();
     }
 
-    public Movie getById(Long movieId, String currency) {
+    public Movie getById(Long movieId, Currencies currency) {
         Movie movie = movieRepository.getById(movieId);
 
-        if (Objects.equals(currency, "USD") || Objects.equals(currency, "usd") ||
-            Objects.equals(currency, "EUR") || Objects.equals(currency, "eur")) {
+        if (Currencies.UAH != currency) {
             double rate = currencyService.getCurrencyRateOnThisDay(currency);
             movie.setPrice(Math.round(movie.getPrice()/rate));
             return movie;
@@ -39,6 +38,10 @@ public class MovieService {
 
     public List<Movie> sortByRating(String order) {
         return movieRepository.sortByRating(order);
+    }
+
+    public List<Movie> sortByPrice(String order) {
+        return movieRepository.sortByPrice(order);
     }
 
     public List<Movie> getMoviesByGenreId(Long genreId) {

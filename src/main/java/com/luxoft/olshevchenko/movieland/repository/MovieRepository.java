@@ -22,5 +22,7 @@ public interface MovieRepository {
 
     List<Movie> sortByRating(String order);
 
+    List<Movie> sortByPrice(String order);
+
     List<Movie> getByGenre(Long genreId);
 }

@@ -1,5 +1,6 @@
 package com.luxoft.olshevchenko.movieland.service;
 
+import com.luxoft.olshevchenko.movieland.entity.enums.Currencies;
 import com.luxoft.olshevchenko.movieland.entity.Movie;
 import com.luxoft.olshevchenko.movieland.repository.MovieRepository;
 import org.junit.jupiter.api.Test;
@@ -76,7 +77,7 @@ class MovieServiceTest {
                 .build();
 
         Mockito.when(movieRepository.getById(1L)).thenReturn(movie);
-        Movie actualMovie = movieService.getById(1L,null);
+        Movie actualMovie = movieService.getById(1L, Currencies.UAH);
 
         assertEquals("Star Wars", actualMovie.getMovieName());
         assertEquals("GB", actualMovie.getCountry());
